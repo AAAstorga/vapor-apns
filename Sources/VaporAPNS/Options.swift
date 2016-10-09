@@ -50,21 +50,15 @@ public struct Options: CustomStringConvertible, NodeInitializable {
         }
     }
     
-    public init(topic: String, teamId: String, keyId: String, keyPath: String, port: Port = .p443, debugLogging: Bool = false) throws {
+    public init(topic: String, teamId: String, keyId: String, keyPriv: String, keyPub: String, port: Port = .p443, debugLogging: Bool = false) throws {
         self.teamId = teamId
         self.topic = topic
         self.keyId = keyId
         
         self.debugLogging = debugLogging
-        
-        let fileManager = FileManager.default
-        guard fileManager.fileExists(atPath: keyPath) else {
-            throw InitializeError.keyFileDoesNotExist
-        }
-        
-        let (priv, pub) = try keyPath.tokenString()
-        self.privateKey = priv
-        self.publicKey = pub
+    
+        self.privateKey = keyPriv
+        self.publicKey = keyPub
     }
     
     public init(node: Node, in context: Context) throws {
